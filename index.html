@@ -382,6 +382,7 @@
         <option value="2">Phần 2 · Câu 14–25</option>
       </select>
       <button class="chip-btn" onclick="pShuffle()">🔀 Xáo câu</button>
+      <button class="chip-btn" onclick="pResetQuestion()" title="Che lại tất cả các ý để gõ lại">↺ Làm lại</button>
       <div class="spacer"></div>
       <span class="stat-pill">Ý đã tìm <b id="pFoundLabel">0</b>/ <span id="pTotalLabel">0</span></span>
     </div>
@@ -397,6 +398,7 @@
         </div>
         <div class="feedback" id="pFeedback"></div>
         <div class="p-actions">
+          <button class="btn" id="pResetBtn" onclick="pResetQuestion()" title="Che lại tất cả các ý để làm lại câu này">↺ Làm lại</button>
           <button class="btn yellow" id="pGiveUp" onclick="pRevealAll()">💡 Hiện các ý còn lại</button>
           <button class="btn primary hidden" id="pNextBtn" onclick="pNext()">Câu tiếp →</button>
         </div>
@@ -965,6 +967,7 @@ function pRevealAll(){
 
 function pNext(){ pIdx = (pIdx+1) % pDeck.length; pRenderQuestion(); }
 function pPrev(){ pIdx = (pIdx-1+pDeck.length) % pDeck.length; pRenderQuestion(); }
+function pResetQuestion(){ pRenderQuestion(); }
 
 function pApplyFilter(){
   const f = document.getElementById("pFilter").value;
