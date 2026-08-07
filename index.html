@@ -306,6 +306,62 @@
   #confetti{position:fixed; inset:0; pointer-events:none; z-index:50;}
   footer{text-align:center; padding:0 0 34px; color:#55617a; font-size:.78rem; font-weight:500;}
 
+  /* ===== AI Grading Styles ===== */
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(129,140,248,0.15));
+    border: 1px solid rgba(34,211,238,0.35); border-radius: 999px;
+    padding: 4px 12px; font-size: 0.78rem; font-weight: 700; color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  .ai-box {
+    background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(129,140,248,0.3);
+    border-radius: 16px; padding: 16px 18px; margin-top: 16px; text-align: left;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    animation: fadeUp .35s ease;
+  }
+  .ai-box h4 {
+    display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 800;
+    color: var(--cyan); margin-bottom: 8px;
+  }
+  .ai-box p.feedback-text {
+    font-size: 0.92rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 10px;
+  }
+  .ai-points-list {
+    font-size: 0.84rem; display: flex; flex-direction: column; gap: 4px; margin-top: 8px;
+  }
+  .ai-point-item { display: flex; align-items: flex-start; gap: 6px; line-height: 1.5; }
+  .ai-point-item.matched { color: var(--green); }
+  .ai-point-item.missing { color: var(--yellow); }
+  .ai-loading {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 16px; color: var(--cyan); font-weight: 700; font-size: 0.92rem;
+  }
+  .ai-spinner {
+    width: 20px; height: 20px; border: 3px solid rgba(34,211,238,0.2);
+    border-top-color: var(--cyan); border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ai-config-toggle {
+    margin-top: 14px; font-size: 0.82rem; color: var(--muted); cursor: pointer;
+    text-decoration: underline; display: inline-block; transition: color 0.2s;
+  }
+  .ai-config-toggle:hover { color: var(--cyan); }
+  .ai-key-input {
+    width: 100%; max-width: 420px; margin: 8px auto 0; background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px;
+    color: var(--text); font-size: 0.82rem; text-align: center; font-family: monospace;
+  }
+  .btn.ai-btn {
+    background: linear-gradient(135deg, rgba(34,211,238,0.2), rgba(129,140,248,0.25));
+    border: 1px solid rgba(34,211,238,0.45); color: #fff;
+    box-shadow: 0 6px 20px rgba(34,211,238,0.2);
+  }
+  .btn.ai-btn:hover {
+    background: linear-gradient(135deg, rgba(34,211,238,0.35), rgba(129,140,248,0.4));
+    box-shadow: 0 8px 26px rgba(34,211,238,0.35); border-color: var(--cyan);
+  }
+
   @media (max-width:560px){
     .card{padding:22px 18px;}
     .qwrap h2{font-size:1.15rem;}
@@ -418,10 +474,24 @@
   <!-- ============ EXAM MODE ============ -->
   <section id="examMode" class="hidden">
     <div class="exam-intro" id="examIntro">
-      <div class="exam-hero">📝</div>
-      <h2>Thi thử tự luận</h2>
+      <div class="exam-hero">🤖</div>
+      <h2>Thi thử tự luận AI</h2>
       <p>Hệ thống bốc ngẫu nhiên <b>5 câu</b> trong 25 câu — mỗi lần một đề khác nhau.<br>
-      Bạn tự viết (hoặc trả lời nhẩm), xem đáp án rồi <b>tự chấm</b> từng câu.<br>Mỗi câu 2 điểm · thang điểm 10.</p>
+      Gõ câu trả lời của bạn, <b>AI (DeepSeek, OpenAI, v.v.)</b> sẽ tự động chấm điểm và đưa ra nhận xét chi tiết.<br>Mỗi câu 2 điểm · thang điểm 10.</p>
+      
+      <div style="margin-bottom: 22px;">
+        <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.9rem; font-weight:700; color:var(--cyan); cursor:pointer;">
+          <input type="checkbox" id="useAiGrading" checked style="width:17px; height:17px; accent-color:var(--cyan);">
+          🤖 Chấm điểm tự động bằng AI
+        </label>
+        <div>
+          <span class="ai-config-toggle" onclick="toggleKeyInput()">⚙️ Cấu hình API Key AI (DeepSeek, OpenAI, v.v.)</span>
+          <div id="keyInputWrap" class="hidden" style="margin-top:8px;">
+            <input type="text" id="deepseekApiKey" class="ai-key-input" placeholder="Dán API Key của bạn vào đây (sk-...)" value="" onchange="saveApiKey(this.value)">
+          </div>
+        </div>
+      </div>
+
       <button class="btn primary" onclick="startExam()">🚀 Bắt đầu thi</button>
     </div>
 
@@ -432,17 +502,28 @@
         <div class="card" id="examCard" style="cursor:default">
           <div class="card-top"><span class="qnum" id="examQnum"></span></div>
           <div class="qwrap"><h2 id="examQtext"></h2></div>
-          <textarea id="examInput" placeholder="Gõ câu trả lời của bạn vào đây (không bắt buộc — có thể trả lời nhẩm rồi bấm Xem đáp án)…"></textarea>
-          <div class="controls" id="examRevealRow">
-            <button class="btn primary" onclick="revealExamAnswer()">👀 Xem đáp án</button>
+          <textarea id="examInput" placeholder="Gõ câu trả lời của bạn vào đây (ví dụ: 'Các đặc điểm kỹ thuật cần xem xét gồm: 1. Khả năng mở rộng...')..."></textarea>
+          
+          <div class="controls" id="examRevealRow" style="margin-top:16px;">
+            <button class="btn ai-btn" id="aiGradeBtn" onclick="revealAndGradeExamAnswer()">🤖 AI Chấm điểm & Xem đáp án</button>
+            <button class="btn" style="font-size:0.84rem;" onclick="revealExamAnswerDirect()">👀 Tự chấm (Chỉ xem đáp án)</button>
           </div>
+
+          <div id="aiLoading" class="ai-loading hidden">
+            <div class="ai-spinner"></div>
+            <span>🤖 AI đang phân tích bài làm và chấm điểm...</span>
+          </div>
+
+          <div id="aiResultBox" class="ai-box hidden"></div>
+
           <div class="answer" id="examAnswer" style="display:block; margin-top:18px"></div>
+          
           <div class="grade-row hidden" id="gradeRow">
-            <p>So với đáp án, bạn tự chấm câu này thế nào?</p>
+            <p id="gradeTitle">So với đáp án và nhận xét AI, bạn chốt điểm câu này thế nào?</p>
             <div class="controls">
-              <button class="btn green" onclick="gradeExam(2)">✓ Đúng đủ ý · 2đ</button>
-              <button class="btn yellow" onclick="gradeExam(1)">~ Một nửa · 1đ</button>
-              <button class="btn red" onclick="gradeExam(0)">✗ Không nhớ · 0đ</button>
+              <button class="btn green" id="gradeBtn2" onclick="gradeExam(2)">✓ Đúng đủ ý · 2đ</button>
+              <button class="btn yellow" id="gradeBtn1" onclick="gradeExam(1)">~ Một nửa · 1đ</button>
+              <button class="btn red" id="gradeBtn0" onclick="gradeExam(0)">✗ Chưa được · 0đ</button>
             </div>
           </div>
         </div>
@@ -479,208 +560,190 @@
 /* ================= DATA: 25 câu tự luận ================= */
 const QUESTIONS = [
 {id:1, part:1, q:"Trình bày các đặc điểm kỹ thuật cần xem xét khi thiết kế một hệ thống IoT về mặt phần mềm?",
- sec:[{h:"Các đặc điểm cần xem xét", items:[
-  "Khả năng mở rộng (Scalability).",
-  "Khả năng tương tác giữa các thiết bị (Interoperability).",
-  "Tính mô-đun và tái sử dụng.",
-  "Khả năng bảo trì, nâng cấp.",
-  "Độ tin cậy và tính sẵn sàng.",
-  "Bảo mật phần mềm và dữ liệu.",
-  "Hiệu năng xử lý và thời gian đáp ứng."]}]},
+ sec:[{h:"Phần mềm cần", items:[
+  "Hỗ trợ toàn bộ vòng đời phát triển sản phẩm.",
+  "Hỗ trợ chu trình thiết kế các thiết bị công nghệ cao, gồm mạch tích hợp (IC) và phần mềm nhúng.",
+  "Các giải pháp phần mềm cần hỗ trợ cải thiện tốc độ và băng thông, tối ưu công suất và hiệu năng, tối ưu đặc tính ăng-ten.",
+  "Ưu tiên các nền tảng phần mềm mã nguồn mở, thiết bị được chứng nhận hoặc kiểm định bởi các tổ chức IoT uy tín."
+ ]}]},
 
-{id:2, part:1, q:"Phân tích ưu điểm của kiến trúc mạng Mesh so với Star trong ứng dụng IoT?",
- sec:[{h:"Ưu điểm của Mesh", items:[
-  "Không phụ thuộc vào một nút trung tâm.",
-  "Có nhiều đường truyền thay thế khi xảy ra lỗi.",
-  "Phạm vi phủ sóng rộng nhờ truyền tiếp (multi-hop).",
-  "Độ tin cậy và khả năng chịu lỗi cao.",
-  "Phù hợp với hệ thống IoT quy mô lớn."]}]},
+{id:2, part:1, q:"Phân tích ưu điểm của kiến trúc mạng Mesh so với mạng Star trong ứng dụng IoT?",
+ sec:[{h:"So sánh kiến trúc", items:[
+  "Mesh: một nút có thể có nhiều đường đi đến đích, nên khi một đường gặp sự cố có thể sử dụng đường khác.",
+  "Star: tất cả dữ liệu phải đi qua hub trung tâm và chỉ có một đường giao tiếp duy nhất."
+ ]},
+ {h:"Kết luận", txt:"→ Vì vậy, Mesh linh hoạt và có khả năng duy trì truyền thông tốt hơn Star khi xảy ra lỗi đường truyền."}]},
 
-{id:3, part:1, q:"Liệt kê các thành phần chính trong kiến trúc tổng thể của Smart City",
- sec:[{items:[
-  "Hạ tầng cảm biến và thiết bị IoT.",
-  "Hệ thống truyền thông/mạng.",
-  "Trung tâm dữ liệu (Data Center).",
-  "Điện toán đám mây (Cloud Computing).",
-  "Hệ thống phân tích dữ liệu và AI.",
-  "Các ứng dụng thông minh (giao thông, y tế, môi trường, năng lượng...).",
-  "Người dân và cơ quan quản lý."]}]},
+{id:3, part:1, q:"Liệt kê các thành phần chính trong kiến trúc tổng thể của một thành phố thông minh (Smart City)?",
+ sec:[{h:"Kiến trúc IoT của Smart City gồm 4 lớp", num:true, items:[
+  "Street Layer: cảm biến, thiết bị thu thập dữ liệu và actuator.",
+  "City Network Layer: chuyển tiếp dữ liệu và tín hiệu điều khiển.",
+  "Data Center Layer: lưu trữ, xử lý, phân tích dữ liệu và đưa ra quyết định.",
+  "Service Layer: cung cấp dữ liệu/dịch vụ đã xử lý cho người dùng và các bên liên quan."
+ ]}]},
 
-{id:4, part:1, q:"Giải thích khái niệm và vai trò của IaaS",
- sec:[{h:"Khái niệm", txt:"IaaS (Infrastructure as a Service) là mô hình cung cấp hạ tầng CNTT (máy chủ, lưu trữ, mạng, máy ảo...) dưới dạng dịch vụ qua Internet."},
-      {h:"Vai trò", items:[
-  "Cung cấp tài nguyên theo nhu cầu.",
-  "Giảm chi phí đầu tư phần cứng.",
-  "Dễ mở rộng hệ thống.",
-  "Tăng tính linh hoạt cho ứng dụng IoT."]}]},
+{id:4, part:1, q:"Giải thích khái niệm và vai trò của mô hình dịch vụ hạ tầng IaaS trong điện toán đám mây?",
+ sec:[{h:"Khái niệm", txt:"IaaS cung cấp các tài nguyên hạ tầng cơ bản như bộ xử lý, lưu trữ và mạng để người dùng triển khai hệ điều hành và ứng dụng. Người dùng không quản lý hạ tầng vật lý bên dưới, nhưng có thể quản lý hệ điều hành, bộ nhớ, ứng dụng và một số cấu hình mạng của máy ảo."},
+      {h:"Vai trò", txt:"→ Vai trò của IaaS là giúp người dùng sử dụng hạ tầng tính toán theo nhu cầu mà không phải tự xây dựng và sở hữu hạ tầng vật lý."}]},
 
-{id:5, part:1, q:"Nêu 4 thành phần cơ bản của hệ thống quản lý ngữ cảnh trong IoT",
- sec:[{num:true, items:[
-  "Thu thập ngữ cảnh (Context Acquisition).",
-  "Mô hình hóa ngữ cảnh (Context Modeling).",
-  "Suy diễn ngữ cảnh (Context Reasoning).",
-  "Phân phối/ứng dụng ngữ cảnh (Context Dissemination)."]}]},
+{id:5, part:1, q:"Nêu 4 thành phần cơ bản của một hệ thống quản lý ngữ cảnh trong IoT?",
+ sec:[{h:"Gồm 4 thành phần", num:true, items:[
+  "Context Acquisition: thu thập ngữ cảnh.",
+  "Context Modelling: mô hình hóa ngữ cảnh.",
+  "Context Reasoning: suy luận ngữ cảnh.",
+  "Context Dissemination: phân phối/phổ biến ngữ cảnh."
+ ]}]},
 
-{id:6, part:1, q:"Trình bày các đặc điểm kỹ thuật về phần mềm cần xem xét khi thiết kế hệ thống IoT",
- sec:[{items:[
-  "Khả năng mở rộng.",
-  "Khả năng tương tác.",
-  "Bảo mật.",
-  "Độ tin cậy.",
-  "Khả năng bảo trì.",
-  "Hiệu năng xử lý.",
-  "Khả năng cập nhật từ xa."]}]},
+{id:6, part:1, q:"Trình bày các đặc điểm kỹ thuật về phần mềm cần xem xét khi thiết kế một hệ thống IoT?",
+ sec:[{h:"Các đặc điểm cần xem xét gồm", items:[
+  "Hỗ trợ toàn bộ vòng đời phát triển sản phẩm.",
+  "Hỗ trợ thiết kế IC và phần mềm nhúng.",
+  "Hỗ trợ tăng tốc độ và băng thông, tối ưu công suất và hiệu năng, tối ưu đặc tính ăng-ten.",
+  "Ưu tiên phần mềm mã nguồn mở và các thiết bị được kiểm định/chứng nhận bởi tổ chức IoT uy tín."
+ ]}]},
 
-{id:7, part:1, q:"So sánh độ tin cậy giữa mạng Star và Mesh",
- sec:[{h:"Star", items:[
-  "Mọi thiết bị kết nối qua nút trung tâm.",
-  "Nếu nút trung tâm hỏng → toàn mạng bị ảnh hưởng.",
-  "Độ tin cậy thấp hơn."]},
-      {h:"Mesh", items:[
-  "Có nhiều đường truyền dự phòng.",
-  "Một nút hỏng mạng vẫn hoạt động.",
-  "Độ tin cậy và khả năng chịu lỗi cao hơn."]}]},
+{id:7, part:1, q:"So sánh sự khác biệt về độ tin cậy giữa kiến trúc mạng Star và Mesh?",
+ sec:[{h:"So sánh độ tin cậy", items:[
+  "Star: độ tin cậy thấp hơn vì tất cả các nút đều phải truyền dữ liệu qua hub trung tâm và chỉ có một đường giao tiếp duy nhất. Khi hub hoặc đường kết nối gặp sự cố, truyền thông bị ảnh hưởng.",
+  "Mesh: độ tin cậy cao hơn vì một nút có thể có nhiều đường đi đến đích. Khi một đường gặp sự cố có thể sử dụng đường khác."
+ ]},
+ {h:"Kết luận", txt:"→ Mesh có độ tin cậy cao hơn Star."}]},
 
-{id:8, part:1, q:"Phân tích 3 hướng tiếp cận chính trong phát triển Smart City",
- sec:[{h:"1 · Hướng công nghệ", items:["Ứng dụng IoT, AI, Big Data, Cloud."]},
-      {h:"2 · Hướng quản lý", items:["Tăng hiệu quả quản lý đô thị và dịch vụ công."]},
-      {h:"3 · Hướng lấy người dân làm trung tâm", items:["Nâng cao chất lượng cuộc sống và sự tham gia của người dân."]}]},
+{id:8, part:1, q:"Phân tích 3 hướng tiếp cận chính trong việc phát triển thành phố thông minh?",
+ sec:[{h:"3 hướng tiếp cận chính", items:[
+  "Từ trên xuống: xây dựng kiến trúc tổng thể trước, sau đó triển khai từng dự án cụ thể.",
+  "Từ dưới lên: xây dựng từng dự án trước, sau đó tích hợp thành kiến trúc tổng thể.",
+  "Lai ghép: kết hợp cả hai cách trên, vừa xây dựng kiến trúc chung, vừa triển khai và tích hợp các dự án."
+ ]}]},
 
-{id:9, part:1, q:"Phân biệt PaaS và SaaS",
- sec:[{h:"PaaS (Platform as a Service)", items:[
-  "Cung cấp nền tảng phát triển ứng dụng.",
-  "Người dùng tự phát triển và triển khai phần mềm."]},
-      {h:"SaaS (Software as a Service)", items:[
-  "Cung cấp phần mềm hoàn chỉnh.",
-  "Người dùng chỉ sử dụng ứng dụng qua Internet."]}]},
+{id:9, part:1, q:"Trình bày sự khác biệt cơ bản giữa PaaS và SaaS?",
+ sec:[{h:"Phân biệt PaaS và SaaS", items:[
+  "PaaS: cung cấp nền tảng và công cụ để người dùng phát triển và triển khai ứng dụng lên Cloud.",
+  "SaaS: cung cấp ứng dụng hoàn chỉnh của nhà cung cấp để người dùng sử dụng trực tiếp qua trình duyệt web hoặc ứng dụng mobile."
+ ]},
+ {h:"Khác biệt chính", txt:"→ Khác biệt chính: PaaS dành cho phát triển/triển khai ứng dụng; SaaS dành cho sử dụng ứng dụng có sẵn."}]},
 
-{id:10, part:1, q:"Các bước cơ bản trong quy trình Machine Learning",
- sec:[{num:true, items:[
-  "Thu thập dữ liệu.",
-  "Tiền xử lý dữ liệu.",
-  "Trích chọn đặc trưng.",
-  "Huấn luyện mô hình.",
-  "Đánh giá mô hình.",
-  "Dự đoán/triển khai."]}]},
-
-{id:11, part:1, q:"Vì sao tối ưu năng lượng quan trọng trong IoT?",
- sec:[{items:[
-  "Thiết bị IoT thường dùng pin.",
-  "Kéo dài thời gian hoạt động.",
-  "Giảm chi phí bảo trì và thay pin.",
-  "Tăng độ ổn định của hệ thống.",
-  "Phù hợp với các thiết bị triển khai ở nơi khó tiếp cận."]}]},
-
-{id:12, part:1, q:"Vai trò của tầng Network trong mô hình 6LoWPAN",
- sec:[{items:[
-  "Định tuyến gói tin IPv6.",
-  "Kết nối các thiết bị IoT với Internet.",
-  "Quản lý địa chỉ IP.",
-  "Truyền dữ liệu giữa các mạng.",
-  "Hỗ trợ giao thức IP trên mạng công suất thấp."]}]},
-
-{id:13, part:1, q:"Mô tả giải pháp giao thông thông minh và lợi ích",
- sec:[{h:"Giải pháp", items:[
-  "Sử dụng cảm biến, camera, GPS, IoT và AI để giám sát giao thông.",
-  "Điều khiển đèn tín hiệu thông minh.",
-  "Theo dõi phương tiện theo thời gian thực."]},
-      {h:"Lợi ích", items:[
-  "Giảm ùn tắc.",
-  "Giảm tai nạn.",
-  "Tiết kiệm thời gian và nhiên liệu.",
-  "Hỗ trợ quản lý giao thông hiệu quả.",
-  "Giảm ô nhiễm môi trường."]}]},
-
-{id:14, part:2, q:"Liệt kê 3 lợi ích quan trọng nhất của điện toán đám mây đối với doanh nghiệp triển khai IoT",
- sec:[{items:[
-  "Tiết kiệm chi phí đầu tư hạ tầng CNTT.",
-  "Dễ dàng mở rộng tài nguyên theo nhu cầu.",
-  "Lưu trữ, xử lý và quản lý dữ liệu tập trung, hỗ trợ truy cập mọi lúc mọi nơi."]}]},
-
-{id:15, part:2, q:"Trình bày 3 hướng tiếp cận chính cho một hệ thống thích ứng ngữ cảnh trong IoT",
- sec:[{num:true, items:[
-  "Thích ứng theo người dùng (User-centric).",
-  "Thích ứng theo môi trường (Environment-centric).",
-  "Thích ứng theo thiết bị hoặc ứng dụng (Device/Application-centric)."]},
-      {txt:"Mục tiêu là hệ thống tự điều chỉnh hành vi dựa trên sự thay đổi của ngữ cảnh."}]},
-
-{id:16, part:2, q:"Theo báo cáo của Cisco, xu hướng số lượng thiết bị kết nối IoT dự kiến sẽ đạt bao nhiêu vào năm 2020?",
- sec:[{txt:"Theo báo cáo của Cisco, số lượng thiết bị kết nối Internet dự kiến đạt khoảng 50 tỷ thiết bị vào năm 2020."}]},
-
-{id:17, part:2, q:"Đặc điểm kỹ thuật cơ bản của chuẩn IEEE 802.15.4 sử dụng trong ZigBee",
- sec:[{items:[
-  "Chuẩn truyền thông không dây công suất thấp (LR-WPAN).",
-  "Tốc độ tối đa 250 kbps.",
-  "Hoạt động chủ yếu ở băng tần 2.4 GHz (ngoài ra còn 868 MHz và 915 MHz).",
-  "Tiêu thụ năng lượng thấp.",
-  "Hỗ trợ mạng Star và Mesh."]}]},
-
-{id:18, part:2, q:"Trình bày kiến trúc hệ thống dự báo mức độ ô nhiễm không khí dựa trên bụi PM2.5",
- sec:[{h:"Kiến trúc gồm các thành phần", num:true, items:[
-  "Cảm biến PM2.5 thu thập dữ liệu.",
-  "Thiết bị IoT/Gateway truyền dữ liệu.",
-  "Cloud/Data Center lưu trữ dữ liệu.",
-  "Machine Learning phân tích và dự báo.",
-  "Ứng dụng Web/Mobile hiển thị kết quả và cảnh báo cho người dùng."]}]},
-
-{id:19, part:2, q:"Nêu các yêu cầu về bảo mật dữ liệu (Data Security) trong hệ thống IoT",
- sec:[{items:[
-  "Đảm bảo tính bí mật (Confidentiality).",
-  "Đảm bảo tính toàn vẹn (Integrity).",
-  "Đảm bảo tính sẵn sàng (Availability).",
-  "Xác thực người dùng và thiết bị.",
-  "Phân quyền truy cập.",
-  "Mã hóa dữ liệu khi truyền và lưu trữ."]}]},
-
-{id:20, part:2, q:"Liệt kê các đặc điểm chính của thông tin ngữ cảnh trong môi trường IoT",
- sec:[{items:[
-  "Động (Dynamic).",
-  "Thời gian thực (Real-time).",
-  "Phụ thuộc môi trường.",
-  "Đa nguồn dữ liệu.",
-  "Không chắc chắn hoặc không đầy đủ.",
-  "Có thể suy diễn để tạo thông tin mới."]}]},
-
-{id:21, part:2, q:"Tại Việt Nam, việc xây dựng đô thị thông minh cần gắn với những công nghệ nền tảng nào?",
- sec:[{items:[
-  "Internet vạn vật (IoT).",
-  "Điện toán đám mây (Cloud Computing).",
-  "Dữ liệu lớn (Big Data).",
-  "Trí tuệ nhân tạo (AI).",
-  "Mạng truyền thông tốc độ cao (4G/5G).",
-  "Trung tâm dữ liệu (Data Center)."]}]},
-
-{id:22, part:2, q:"Phân tích ưu điểm của chuẩn WiFi 802.11n (WiFi 4)",
- sec:[{items:[
-  "Tốc độ truyền cao hơn các chuẩn cũ (lên đến 600 Mbps).",
-  "Phạm vi phủ sóng rộng hơn.",
-  "Sử dụng công nghệ MIMO giúp tăng tốc độ và độ ổn định.",
-  "Khả năng chống nhiễu tốt hơn.",
-  "Hỗ trợ cả băng tần 2.4 GHz và 5 GHz."]}]},
-
-{id:23, part:2, q:"Ví dụ ứng dụng quản lý thiết bị nhà bếp thông minh trong Smart Home",
- sec:[{h:"Ví dụ", items:[
-  "Tủ lạnh thông minh theo dõi thực phẩm.",
-  "Bếp từ kết nối Internet.",
-  "Lò vi sóng điều khiển từ xa bằng điện thoại.",
-  "Máy hút mùi tự động bật khi phát hiện khói.",
-  "Người dùng có thể giám sát và điều khiển các thiết bị qua ứng dụng di động."]}]},
-
-{id:24, part:2, q:"Trình bày vai trò của Data Center trong kiến trúc hệ thống IoT",
- sec:[{h:"Data Center có nhiệm vụ", items:[
-  "Thu thập dữ liệu từ các thiết bị IoT.",
-  "Lưu trữ dữ liệu tập trung.",
-  "Xử lý và phân tích dữ liệu.",
-  "Cung cấp tài nguyên tính toán cho Cloud.",
-  "Hỗ trợ quản lý, giám sát và điều khiển các thiết bị IoT."]}]},
-
-{id:25, part:2, q:"Giải thích quy trình suy diễn ngữ cảnh từ dữ liệu thô của cảm biến",
+{id:10, part:1, q:"Nêu các bước cơ bản trong một quy trình xử lý của Machine Learning?",
  sec:[{h:"Quy trình gồm các bước", num:true, items:[
-  "Thu thập dữ liệu thô (Raw Data) từ cảm biến.",
-  "Tiền xử lý dữ liệu (lọc nhiễu, chuẩn hóa).",
-  "Mô hình hóa ngữ cảnh.",
-  "Suy diễn ngữ cảnh bằng luật hoặc AI/Machine Learning.",
-  "Cung cấp ngữ cảnh cho ứng dụng, từ đó hệ thống tự động đưa ra quyết định hoặc hành động phù hợp."]}]}
+  "Thu thập dữ liệu",
+  "Tiền xử lý dữ liệu",
+  "Xây dựng/lựa chọn mô hình",
+  "Huấn luyện và thử nghiệm",
+  "Đánh giá hiệu suất",
+  "Thực thi mô hình"
+ ]},
+ {h:"Kết quả cuối cùng", txt:"Kết quả cuối cùng của mô hình là dự đoán hoặc nhận dạng."}]},
+
+{id:11, part:1, q:"Tại sao việc tối ưu hóa năng lượng lại đóng vai trò quan trọng trong thiết kế thiết bị IoT?",
+ sec:[{h:"Lý do quan trọng", items:[
+  "Vì phần lớn cảm biến IoT sử dụng pin, nên năng lượng bị giới hạn. Tối ưu năng lượng giúp kéo dài thời gian hoạt động và tuổi thọ của thiết bị.",
+  "Một giải pháp là chỉ cho node hoạt động khi thu thập và truyền dữ liệu, sau đó chuyển sang chế độ sleep."
+ ]}]},
+
+{id:12, part:1, q:"Trình bày vai trò của tầng Network trong mô hình phân lớp giao thức 6LoWPAN?",
+ sec:[{h:"Tầng Network có nhiệm vụ", items:[
+  "Đánh địa chỉ mạng.",
+  "Định tuyến dữ liệu qua mạng.",
+  "Cung cấp địa chỉ IP để truyền dữ liệu đến thiết bị khác."
+ ]},
+ {h:"Giao thức sử dụng", txt:"Trong 6LoWPAN sử dụng IPv6."}]},
+
+{id:13, part:1, q:"Mô tả giải pháp giao thông thông minh và các lợi ích thực tế mà nó mang lại cho cư dân đô thị?",
+ sec:[{h:"Giải pháp", txt:"Sử dụng IoT, cảm biến, WSN, GPS và các hệ thống xử lý dữ liệu để giám sát giao thông, tối ưu đèn tín hiệu, giao thông công cộng và lựa chọn tuyến đường."},
+      {h:"Lợi ích thực tế", items:[
+  "Giúp cư dân di chuyển nhanh, thuận lợi và tiết kiệm chi phí.",
+  "Giảm phương tiện cá nhân và ùn tắc.",
+  "Góp phần giảm khí thải.",
+  "Hỗ trợ phương tiện khẩn cấp bằng cách lựa chọn lộ trình tối ưu và ưu tiên đèn xanh."
+ ]}]},
+
+{id:14, part:2, q:"Liệt kê 3 lợi ích quan trọng nhất của điện toán đám mây đối với doanh nghiệp?",
+ sec:[{h:"3 lợi ích quan trọng nhất", num:true, items:[
+  "Giảm chi phí đầu tư.",
+  "Nâng cao hiệu quả chuyên môn hóa theo quy mô công nghiệp.",
+  "Nâng cao hiệu quả sử dụng tài nguyên."
+ ]}]},
+
+{id:15, part:2, q:"Trình bày 3 hướng tiếp cận chính cho một hệ thống thích ứng ngữ cảnh trong IoT?",
+ sec:[{h:"3 hướng tiếp cận chính", num:true, items:[
+  "No application level context model: ứng dụng tự thực hiện thu thập, tiền xử lý, lưu trữ và suy luận ngữ cảnh.",
+  "Implicit context model: ứng dụng sử dụng library, framework, toolkit để thực hiện các chức năng trên.",
+  "Explicit context model: sử dụng context management infrastructure/middleware, ứng dụng không trực tiếp thực hiện các chức năng quản lý ngữ cảnh."
+ ]},
+ {h:"Ghi chú", txt:"Hướng Explicit context model được ưu tiên sử dụng hơn trong thời gian gần đây."}]},
+
+{id:16, part:2, q:"Theo dự báo của Cisco, số lượng thiết bị kết nối Internet vào năm 2020 là bao nhiêu?",
+ sec:[{h:"Dự báo của Cisco", txt:"Theo dự báo được nêu, số lượng thiết bị kết nối Internet vào năm 2020 đạt khoảng 50 tỷ thiết bị."}]},
+
+{id:17, part:2, q:"Trình bày các đặc điểm cơ bản của chuẩn IEEE 802.15.4 được sử dụng trong Zigbee?",
+ sec:[{h:"IEEE 802.15.4 được thiết kế cho mạng", items:[
+  "Tốc độ dữ liệu thấp.",
+  "Công suất thấp.",
+  "Hỗ trợ cơ chế truy cập CSMA/CA.",
+  "PSDU mang tối đa 127 byte dữ liệu.",
+  "Hỗ trợ cấu hình mạng đa dạng và điều chỉnh chu kỳ hoạt động của thiết bị."
+ ]},
+ {h:"Trong Zigbee", txt:"Trong Zigbee, chuẩn này kết hợp với các cơ chế như O-QPSK/DSSS, CRC và ACK để tăng độ tin cậy."}]},
+
+{id:18, part:2, q:"Trình bày kiến trúc của hệ thống dự báo ô nhiễm không khí dựa trên bụi PM2.5?",
+ sec:[{h:"Quy trình kiến trúc", txt:"Cảm biến PM2.5 → Zigbee → Gateway → Cloud → xử lý, phân tích và dự báo bằng AI → hiển thị dữ liệu, cảnh báo và dự đoán trên Mobile App/Web App."}]},
+
+{id:19, part:2, q:"Trình bày yêu cầu về Data Security trong hệ thống tính toán cho IoT?",
+ sec:[{h:"Yêu cầu Data Security", txt:"Data Security yêu cầu hệ thống có khả năng chống các cuộc tấn công từ bên ngoài nhằm vào dữ liệu bí mật được lưu trữ trong hệ thống hoặc trên mạng."}]},
+
+{id:20, part:2, q:"Nêu các đặc điểm chính của thông tin ngữ cảnh trong IoT?",
+ sec:[{h:"Thông tin ngữ cảnh có 8 đặc điểm", num:true, items:[
+  "Được thu thập từ nút cảm biến hoặc mạng cảm biến.",
+  "Được thu thập từ thiết bị nhỏ, tài nguyên hạn chế.",
+  "Được thu thập từ nhiều nguồn.",
+  "Thay đổi liên tục.",
+  "Có thể thu thập từ đối tượng đứng yên hoặc di động.",
+  "Có yếu tố thời gian.",
+  "Có yếu tố không gian.",
+  "Có thể không hoàn hảo và không chắc chắn."
+ ]}]},
+
+{id:21, part:2, q:"Những công nghệ nền tảng nào cần thiết để xây dựng đô thị thông minh tại Việt Nam?",
+ sec:[{h:"Các công nghệ nền tảng chính gồm", items:[
+  "IoT/5G để kết nối, thu thập và giám sát dữ liệu.",
+  "Cloud Computing để lưu trữ và tính toán.",
+  "Edge Computing để xử lý gần thiết bị, giảm độ trễ.",
+  "Big Data để xử lý lượng dữ liệu lớn.",
+  "AI để phân tích dữ liệu và tạo tính thông minh cho ứng dụng."
+ ]},
+ {h:"Lưu ý bổ sung", txt:"Ngoài ra nên ưu tiên các nền tảng mã nguồn mở để tăng khả năng làm chủ công nghệ."}]},
+
+{id:22, part:2, q:"Trình bày ưu điểm của chuẩn WiFi 802.11n?",
+ sec:[{h:"Công nghệ sử dụng", txt:"802.11n sử dụng công nghệ MIMO, tận dụng nhiều tín hiệu và nhiều anten."},
+      {h:"Ưu điểm", items:[
+  "Tốc độ có thể đạt khoảng 100 Mbps.",
+  "Phạm vi phủ sóng tốt hơn.",
+  "Khả năng chịu nhiễu tốt hơn.",
+  "Tương thích với thiết bị 802.11g."
+ ]}]},
+
+{id:23, part:2, q:"Cho ví dụ về quản lý thiết bị nhà bếp thông minh trong Smart Home?",
+ sec:[{h:"Ví dụ", items:[
+  "Tủ lạnh thông minh: biết số lượng trứng còn lại, dự đoán khi nào sẽ hết và cảnh báo gia chủ mua thêm.",
+  "Máy pha cà phê thông minh: dựa vào tình trạng sức khỏe và khẩu vị từng người để xác định loại cà phê, lượng cà phê và thời điểm sử dụng, sau đó tự pha mà không cần người dùng can thiệp."
+ ]}]},
+
+{id:24, part:2, q:"Trình bày vai trò của Data Center trong hệ thống IoT?",
+ sec:[{h:"Data Center có vai trò", items:[
+  "Cung cấp khả năng tính toán và lưu trữ lớn.",
+  "Quản lý, điều khiển và phân phối tài nguyên tính toán và lưu trữ.",
+  "Xử lý các tác vụ của ứng dụng yêu cầu năng lực tính toán lớn.",
+  "Trong Smart City, Data Center còn lưu trữ, xử lý, phân tích dữ liệu và hỗ trợ đưa ra quyết định."
+ ]}]},
+
+{id:25, part:2, q:"Giải thích quy trình suy diễn ngữ cảnh từ dữ liệu thô (Raw Data)?",
+ sec:[{h:"Quy trình", txt:"Raw Data → Sensed-context → Combined-context / Inferred-context → Learned-context."},
+      {h:"Chi tiết các mức ngữ cảnh", items:[
+  "Sensed-context: dữ liệu thô thu trực tiếp từ cảm biến như nhiệt độ, độ ẩm, ánh sáng.",
+  "Combined-context: được tạo từ Sensed-context bằng tính toán toán học.",
+  "Inferred-context: được tạo bằng cách áp dụng các luật suy luận lên Sensed-context để tạo ngữ cảnh mức cao hơn.",
+  "Learned-context: được tạo bằng các thuật toán học/data mining như Decision Tree, Neural Network dựa trên các ngữ cảnh đã có."
+ ]}]}
 ];
 
 /* ================= STATE ================= */
@@ -991,17 +1054,89 @@ document.getElementById("pInput").addEventListener("keydown", e=>{
   if(e.key === "Enter"){ e.preventDefault(); pCheck(); }
 });
 
-/* ================= EXAM MODE ================= */
+/* ================= EXAM MODE (AI INTEGRATED) ================= */
 let examSet = [], examIdx = 0, examScores = [];
+let examUserAnswers = [], examAiFeedbacks = [];
+
+function getApiKey(){
+  return (localStorage.getItem("deepseek-key") || "").trim();
+}
+function saveApiKey(val){
+  localStorage.setItem("deepseek-key", val.trim());
+}
+function toggleKeyInput(){
+  document.getElementById("keyInputWrap").classList.toggle("hidden");
+}
+
+function getTextForGrading(q){
+  let text = "";
+  for(const s of q.sec){
+    if(s.h) text += s.h + ": ";
+    if(s.txt) text += s.txt + " ";
+    if(s.items) text += s.items.join("; ") + " ";
+  }
+  return text.trim();
+}
+
+async function gradeWithDeepSeek(questionText, standardAnswer, userText){
+  const apiKey = getApiKey();
+  if(!apiKey){
+    throw new Error("Bạn chưa nhập API Key AI. Vui lòng nhấn '⚙️ Cấu hình API Key AI' để nhập API Key của bạn (ví dụ DeepSeek, OpenAI...) trước khi sử dụng tính năng chấm tự động.");
+  }
+  const promptSystem = `Bạn là một giám khảo chấm thi tự luận môn Internet of Things (IoT).
+Nhiệm vụ của bạn là so sánh bài làm của sinh viên với đáp án chuẩn và chấm điểm theo thang điểm 2:
+- 2 điểm: Sinh viên trả lời đúng và đầy đủ hầu hết các ý chính.
+- 1 điểm: Sinh viên trả lời được khoảng 40% - 70% số ý, còn thiếu một số ý quan trọng hoặc trình bày chưa đủ sâu.
+- 0 điểm: Sinh viên trả lời sai, không đúng trọng tâm, quá thiếu ý hoặc bỏ trống.
+
+YÊU CẦU ĐỊNH DẠNG:
+Trả về duy nhất 1 chuỗi JSON chuẩn (KHÔNG dùng markdown codeblock, không ghi gì ngoài JSON):
+{
+  "score": 2,
+  "feedback": "Nhận xét chi tiết ngắn gọn 2-3 câu bằng tiếng Việt: khen điểm tốt, nêu rõ ý còn thiếu.",
+  "matched_points": ["Ý đã trả lời đúng 1", "Ý đã trả lời đúng 2"],
+  "missing_points": ["Ý còn thiếu 1"]
+}`;
+
+  const response = await fetch("https://api.deepseek.com/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + apiKey
+    },
+    body: JSON.stringify({
+      model: "deepseek-chat",
+      messages: [
+        { role: "system", content: promptSystem },
+        { role: "user", content: `Câu hỏi: ${questionText}\n\nĐáp án chuẩn:\n${standardAnswer}\n\nBài làm của sinh viên:\n${userText}` }
+      ],
+      temperature: 0.2
+    })
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`API AI báo lỗi (${response.status}): ${errText}`);
+  }
+
+  const data = await response.json();
+  let content = data.choices[0].message.content.trim();
+  content = content.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/, "").trim();
+  return JSON.parse(content);
+}
 
 function startExam(){
+  const savedKey = localStorage.getItem("deepseek-key") || "";
+  const el = document.getElementById("deepseekApiKey");
+  if(el) el.value = savedKey;
+
   const pool = QUESTIONS.slice();
   for(let i=pool.length-1;i>0;i--){
     const j = Math.floor(Math.random()*(i+1));
     [pool[i],pool[j]] = [pool[j],pool[i]];
   }
   examSet = pool.slice(0,5);
-  examIdx = 0; examScores = [];
+  examIdx = 0; examScores = []; examUserAnswers = []; examAiFeedbacks = [];
   document.getElementById("examIntro").classList.add("hidden");
   document.getElementById("examResult").classList.add("hidden");
   document.getElementById("examQuestion").classList.remove("hidden");
@@ -1030,17 +1165,94 @@ function renderExamQuestion(){
   document.getElementById("examInput").value = "";
   document.getElementById("examAnswer").innerHTML = "";
   document.getElementById("examRevealRow").classList.remove("hidden");
+  document.getElementById("aiLoading").classList.add("hidden");
+  document.getElementById("aiResultBox").classList.add("hidden");
+  document.getElementById("aiResultBox").innerHTML = "";
   document.getElementById("gradeRow").classList.add("hidden");
+  
+  document.getElementById("gradeBtn2").style.outline = "none";
+  document.getElementById("gradeBtn1").style.outline = "none";
+  document.getElementById("gradeBtn0").style.outline = "none";
+
   const card = document.getElementById("examCard");
   card.classList.remove("card-enter"); void card.offsetWidth; card.classList.add("card-enter");
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function revealExamAnswer(){
+async function revealAndGradeExamAnswer(){
+  const q = examSet[examIdx];
+  const userText = document.getElementById("examInput").value.trim();
+  const useAi = document.getElementById("useAiGrading").checked;
+
+  document.getElementById("examRevealRow").classList.add("hidden");
+  document.getElementById("examAnswer").innerHTML =
+    `<h3 style="color:var(--green)">📖 Đáp án tham khảo</h3>` + renderAnswerHTML(q);
+
+  examUserAnswers[examIdx] = userText;
+
+  if (useAi && userText.length > 0) {
+    document.getElementById("aiLoading").classList.remove("hidden");
+    try {
+      const result = await gradeWithDeepSeek(q.q, getTextForGrading(q), userText);
+      document.getElementById("aiLoading").classList.add("hidden");
+
+      examAiFeedbacks[examIdx] = result.feedback;
+
+      const aiBox = document.getElementById("aiResultBox");
+      const scoreColor = result.score === 2 ? "var(--green)" : result.score === 1 ? "var(--yellow)" : "var(--red)";
+      
+      let matchedHtml = "";
+      if (result.matched_points && result.matched_points.length > 0) {
+        matchedHtml += `<div class="ai-point-item matched"><b>✓ Ý trả lời đúng:</b> ${esc(result.matched_points.join("; "))}</div>`;
+      }
+      let missingHtml = "";
+      if (result.missing_points && result.missing_points.length > 0) {
+        missingHtml += `<div class="ai-point-item missing"><b>⚠️ Ý còn thiếu:</b> ${esc(result.missing_points.join("; "))}</div>`;
+      }
+
+      aiBox.innerHTML = `
+        <div class="ai-badge">🤖 Đánh giá bởi AI</div>
+        <h4>Đánh giá: <span style="color:${scoreColor}">${result.score} / 2 điểm</span></h4>
+        <p class="feedback-text">${esc(result.feedback)}</p>
+        <div class="ai-points-list">${matchedHtml}${missingHtml}</div>
+      `;
+      aiBox.classList.remove("hidden");
+
+      // Suggest grade button
+      if (result.score === 2) document.getElementById("gradeBtn2").style.outline = "2px solid var(--green)";
+      else if (result.score === 1) document.getElementById("gradeBtn1").style.outline = "2px solid var(--yellow)";
+      else document.getElementById("gradeBtn0").style.outline = "2px solid var(--red)";
+
+    } catch (err) {
+      console.error("AI API Error:", err);
+      document.getElementById("aiLoading").classList.add("hidden");
+      const aiBox = document.getElementById("aiResultBox");
+      aiBox.innerHTML = `
+        <div class="ai-badge" style="color:var(--red); border-color:var(--red);">⚠️ Không kết nối được AI</div>
+        <p class="feedback-text" style="color:var(--muted);">${esc(err.message)}.<br>Bạn vui lòng tự chấm điểm bằng các nút bên dưới.</p>
+      `;
+      aiBox.classList.remove("hidden");
+    }
+  } else if (useAi && userText.length === 0) {
+    const aiBox = document.getElementById("aiResultBox");
+    aiBox.innerHTML = `
+      <div class="ai-badge" style="color:var(--yellow); border-color:var(--yellow);">ℹ️ Bài làm trống</div>
+      <p class="feedback-text" style="color:var(--muted);">Bạn chưa nhập câu trả lời. AI chấm <b>0 điểm</b>. Tham khảo đáp án chuẩn bên dưới.</p>
+    `;
+    aiBox.classList.remove("hidden");
+    document.getElementById("gradeBtn0").style.outline = "2px solid var(--red)";
+  }
+
+  document.getElementById("gradeRow").classList.remove("hidden");
+}
+
+function revealExamAnswerDirect(){
+  document.getElementById("examRevealRow").classList.add("hidden");
+  document.getElementById("aiResultBox").classList.add("hidden");
+  document.getElementById("aiLoading").classList.add("hidden");
   const q = examSet[examIdx];
   document.getElementById("examAnswer").innerHTML =
     `<h3 style="color:var(--green)">📖 Đáp án tham khảo</h3>` + renderAnswerHTML(q);
-  document.getElementById("examRevealRow").classList.add("hidden");
   document.getElementById("gradeRow").classList.remove("hidden");
 }
 
@@ -1081,9 +1293,25 @@ function showExamResult(){
   const list = document.getElementById("resultList");
   list.innerHTML = examSet.map((q,i)=>{
     const s = examScores[i];
+    const userAns = examUserAnswers[i];
+    const aiFb = examAiFeedbacks[i];
     const cls = s===2?"g":s===1?"y":"r";
     const label = s===2?"✓ 2đ":s===1?"~ 1đ":"✗ 0đ";
-    return `<div class="result-item"><span class="tag ${cls}">${label}</span><span><b>Câu ${q.id}:</b> ${esc(q.q)}</span></div>`;
+    let extra = "";
+    if (userAns) {
+      extra += `<div style="margin-top:6px; font-size:0.83rem; color:#cbd5e1;"><b>Bài làm của bạn:</b> ${esc(userAns)}</div>`;
+    }
+    if (aiFb) {
+      extra += `<div style="margin-top:4px; font-size:0.83rem; color:var(--cyan);"><b>🤖 DeepSeek AI nhận xét:</b> ${esc(aiFb)}</div>`;
+    }
+    return `
+      <div class="result-item">
+        <span class="tag ${cls}">${label}</span>
+        <div style="flex:1;">
+          <b>Câu ${q.id}:</b> ${esc(q.q)}
+          ${extra}
+        </div>
+      </div>`;
   }).join("");
 
   if(total >= 8) launchConfetti();
