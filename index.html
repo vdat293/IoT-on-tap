@@ -567,7 +567,7 @@ const QUESTIONS = [
   "Ưu tiên các nền tảng phần mềm mã nguồn mở, thiết bị được chứng nhận hoặc kiểm định bởi các tổ chức IoT uy tín."
  ]}]},
 
-{id:2, part:1, q:"Phân tích ưu điểm của kiến trúc mạng Mesh so với mạng Star trong ứng dụng IoT?",
+{id:2, part:1, q:"Phân tích ưu điểm của kiến trúc mạng mắt lưới (Mesh) so với mạng sao (Star) trong ứng dụng IoT?",
  sec:[{h:"Ưu điểm của mạng Mesh so với Star", items:[
   "Một nút có thể có nhiều đường đi đến đích (đa đường truyền).",
   "Khi một đường gặp sự cố, dữ liệu tự động đi theo đường khác (tự khắc phục lỗi - Self-healing).",
@@ -585,19 +585,123 @@ const QUESTIONS = [
   "Hỗ trợ và thúc đẩy đổi mới sáng tạo (Innovation Enablement and Acceleration)."
  ]}]},
 
-{id:4, part:1, q:"Giải thích khái niệm và vai trò của mô hình dịch vụ hạ tầng IaaS trong điện toán đám mây?",
- sec:[{h:"Khái niệm", txt:"IaaS cung cấp các tài nguyên hạ tầng cơ bản như bộ xử lý, lưu trữ và mạng để người dùng triển khai hệ điều hành và ứng dụng. Người dùng không quản lý hạ tầng vật lý bên dưới, nhưng có thể quản lý hệ điều hành, bộ nhớ, ứng dụng và một số cấu hình mạng của máy ảo."},
-      {h:"Vai trò", txt:"→ Vai trò của IaaS là giúp người dùng sử dụng hạ tầng tính toán theo nhu cầu mà không phải tự xây dựng và sở hữu hạ tầng vật lý."}]},
+{id:4, part:1, q:"Giải thích khái niệm và vai trò của mô hình dịch vụ hạ tầng (IaaS) trong điện toán đám mây?",
+ sec:[{h:"Khái niệm IaaS", txt:"IaaS (Infrastructure as a Service) cung cấp các tài nguyên hạ tầng cơ bản như bộ xử lý (CPU), dung lượng lưu trữ, và kết nối mạng dưới dạng dịch vụ ảo hóa để người dùng triển khai hệ điều hành và ứng dụng."},
+      {h:"Vai trò của IaaS", txt:"→ Giúp người dùng/doanh nghiệp linh hoạt mở rộng tài nguyên theo nhu cầu mà không phải tự đầu tư và sở hữu hạ tầng máy chủ vật lý."}]},
 
 {id:5, part:1, q:"Nêu 4 thành phần cơ bản của một hệ thống quản lý ngữ cảnh trong IoT?",
- sec:[{h:"Gồm 4 thành phần", num:true, items:[
-  "Context Acquisition: thu thập ngữ cảnh.",
-  "Context Modelling: mô hình hóa ngữ cảnh.",
-  "Context Reasoning: suy luận ngữ cảnh.",
-  "Context Dissemination: phân phối/phổ biến ngữ cảnh."
+ sec:[{h:"Gồm 4 thành phần cơ bản", num:true, items:[
+  "Context Acquisition: Thu thập ngữ cảnh từ các cảm biến hoặc nguồn dữ liệu.",
+  "Context Modelling: Mô hình hóa ngữ cảnh dưới dạng cấu trúc dữ liệu chuẩn.",
+  "Context Reasoning: Suy luận ngữ cảnh để rút ra tri thức mức cao hơn.",
+  "Context Dissemination: Phân phối/phổ biến ngữ cảnh đến ứng dụng tiêu thụ."
  ]}]},
 
-{id:6, part:1, q:"Trình bày các đặc điểm kỹ thuật về phần mềm cần xem xét khi thiết kế một hệ thống IoT?",
+{id:6, part:1, q:"Nêu các thách thức về tốc độ và băng thông mà công nghệ IoT đang đối mặt hiện nay?",
+ sec:[{h:"Thách thức về tốc độ và băng thông trong IoT", items:[
+  "Số lượng thiết bị di động và thiết bị IoT tăng nhanh làm cho lượng dữ liệu truyền và nhận ngày càng lớn. Vì vậy, hệ thống phải bảo đảm tốc độ truyền tải nhanh hơn và băng thông lớn hơn trên cả mạng có dây và không dây.",
+  "Các dịch vụ như luồng video, tương tác trò chơi và dịch vụ Web tốc độ cao ngày càng đẩy hệ thống đến giới hạn, không chỉ ở thiết bị IoT mà còn ở máy chủ, bộ định tuyến và thiết bị chuyển mạch."
+ ]},
+ {h:"Ý chính cần nhớ", txt:"→ Nhiều thiết bị → nhiều dữ liệu → cần tăng tốc độ truyền và mở rộng băng thông trên toàn hệ thống."}]},
+
+{id:7, part:1, q:"Giao thức Zigbee hoạt động dựa trên tiêu chuẩn IEEE nào? Nêu 3 nhóm thiết bị logic trong mạng Zigbee?",
+ sec:[{h:"Tiêu chuẩn IEEE", txt:"Zigbee sử dụng IEEE 802.15.4 ở tầng vật lý PHY và tầng MAC."},
+      {h:"3 nhóm thiết bị logic trong mạng Zigbee", items:[
+  "Coordinator – Thiết bị điều phối mạng: tạo mạng Zigbee, cấp địa chỉ cho các nút tham gia; mỗi mạng chỉ cần một Coordinator.",
+  "Router – Bộ định tuyến: gửi, nhận và chuyển tiếp gói dữ liệu, tìm đường truyền thích hợp trong mạng.",
+  "End Device – Thiết bị đầu cuối: thiết bị đầu cuối tham gia mạng Zigbee."
+ ]},
+ {h:"Nhớ nhanh", txt:"→ Coordinator – Router – End Device."}]},
+
+{id:8, part:1, q:"Trình bày mục tiêu cốt lõi và các cảm biến thường dùng trong giải pháp nhà thông minh?",
+ sec:[{h:"Mục tiêu cốt lõi của Smart Home", txt:"Tạo ra một ngôi nhà tiện nghi và có khả năng thích ứng với nhu cầu của gia chủ."},
+      {h:"Các cảm biến thường dùng", txt:"Gồm cảm biến nhiệt độ, độ ẩm, ánh sáng để thu thập điều kiện môi trường trong và ngoài nhà. Ngoài ra, hệ thống an ninh có thể sử dụng cảm biến cửa ra vào/cửa sổ, cảm biến chuyển động, cảm biến khí gas, cảm biến khói và camera giám sát."}]},
+
+{id:9, part:1, q:"Điện toán cận biên là gì? Tại sao nó giúp giảm độ trễ cho các ứng dụng IoT?",
+ sec:[{h:"Khái niệm Điện toán cận biên (Edge Computing)", txt:"Là cách đưa khả năng lưu trữ và tính toán đến các thiết bị nằm ở rìa hệ thống, gần với thiết bị IoT. Thiết bị cận biên có thể là IoT Gateway, máy chủ cận biên hoặc máy trạm cận biên."},
+      {h:"Lý do giúp giảm độ trễ", txt:"Giúp giảm độ trễ vì dữ liệu và các tác vụ đơn giản có thể được xử lý ngay gần thiết bị IoT, thay vì phải gửi toàn bộ dữ liệu đến trung tâm dữ liệu ở xa rồi chờ kết quả trả về. Nhờ đó, hệ thống có khả năng phản hồi tức thời, phù hợp với các ứng dụng yêu cầu thời gian thực."}]},
+
+{id:10, part:1, q:"Phân biệt sự khác nhau giữa Sensed-context và Inferred-context?",
+ sec:[{h:"Sensed-context – ngữ cảnh thu thập", txt:"Là dữ liệu được thu thập trực tiếp từ môi trường, chẳng hạn nhiệt độ, độ ẩm, ánh sáng. Dữ liệu ở dạng thô và chưa qua xử lý. Đây là nguồn để tạo ra các loại ngữ cảnh khác."},
+      {h:"Inferred-context – ngữ cảnh suy luận", txt:"Được tạo ra từ Sensed-context bằng cách áp dụng các luật suy luận. Vì vậy, nó mang thông tin ở mức cao hơn."}]},
+
+{id:11, part:1, q:"Theo báo cáo của Cisco, IoT mang lại giá trị kinh tế như thế nào cho các doanh nghiệp?",
+ sec:[{h:"Báo cáo từ Cisco", txt:"Cisco cho rằng IoT có khả năng mang lại giá trị kinh tế rất lớn. Báo cáo được nêu cho biết IoT đã mang lại khoảng 613 tỷ USD lợi nhuận trong năm 2013."},
+      {h:"Kỳ vọng trong tương lai", txt:"Các doanh nghiệp có khả năng tối ưu hóa sự kết nối giữa con người, quá trình, dữ liệu và mọi vật được kỳ vọng sẽ đạt mức sinh lời lớn nhất trong tương lai."},
+      {h:"Ý cần nhớ", txt:"→ 613 tỷ USD lợi nhuận năm 2013 + tối ưu kết nối người – quá trình – dữ liệu – vật."}]},
+
+{id:12, part:1, q:"Trình bày vai trò của tầng Network trong mô hình phân lớp giao thức 6LoWPAN?",
+ sec:[{h:"Tầng Network có nhiệm vụ", items:[
+  "Đánh địa chỉ mạng: Cung cấp địa chỉ IPv6 toàn cầu cho thiết bị.",
+  "Định tuyến dữ liệu (Routing): Định tuyến các gói tin qua các nút mạng không dây (sử dụng giao thức RPL).",
+  "Đóng gói & Tương thích: Nén tiêu đề IPv6/UDP để phù hợp với kích thước gói tin 802.15.4."
+ ]},
+ {h:"Giao thức cốt lõi", txt:"Trong 6LoWPAN sử dụng giao thức địa chỉ IPv6."}]},
+
+{id:13, part:1, q:"Mô tả kiến trúc 4 lớp của một hệ thống nông nghiệp thông minh (Smart Agriculture).",
+ sec:[{h:"Kiến trúc 4 lớp gồm: WSN – Edge – Cloud Computing – Service", items:[
+  "WSN: các cảm biến thu thập thông tin môi trường như nhiệt độ, độ ẩm, ánh sáng... và các thiết bị chấp hành như máy bơm, đèn.",
+  "Edge: các nút biên/Gateway nhận dữ liệu từ WSN qua các giao thức như Zigbee, Bluetooth, LoRa, WLAN... rồi chuyển tiếp dữ liệu.",
+  "Cloud Computing: lưu trữ, xử lý, phân tích dữ liệu, đưa ra dự đoán hoặc quyết định điều khiển.",
+  "Service: cung cấp dữ liệu và kết quả phân tích cho người dùng qua ứng dụng; người dùng cũng có thể gửi lệnh điều khiển ngược lại thiết bị."
+ ]},
+ {h:"Luồng cơ bản", txt:"→ Cảm biến → Edge/Gateway → Cloud → Dịch vụ/người dùng → lệnh điều khiển → thiết bị."}]},
+
+{id:14, part:2, q:"Liệt kê 3 đặc trưng cơ bản của điện toán đám mây ảnh hưởng đến hiệu năng hệ thống IoT.",
+ sec:[{h:"Ba đặc trưng quan trọng", items:[
+  "Khả năng mở rộng và co giãn (Scalability, Elasticity): có thể tăng tài nguyên để xử lý lượng công việc ngày càng lớn và thích ứng linh hoạt với nhu cầu thực tế.",
+  "Khả năng sẵn sàng và tin cậy (Availability, Reliability): hệ thống có thể hoạt động và cung cấp chức năng khi được yêu cầu.",
+  "Tối ưu hiệu năng (Performance Optimization): tận dụng khả năng tính toán mạnh của hạ tầng đám mây để bảo đảm hiệu suất của ứng dụng."
+ ]},
+ {h:"Nhớ nhanh", txt:"→ Mở rộng – Sẵn sàng/tin cậy – Hiệu năng."}]},
+
+{id:15, part:2, q:"Trình bày 3 hướng tiếp cận chính cho một hệ thống thích ứng ngữ cảnh?",
+ sec:[{h:"3 hướng tiếp cận chính", num:true, items:[
+  "No application level context model: Mô hình không quản lý ngữ cảnh ở mức ứng dụng. Ứng dụng tự thực hiện thu thập, tiền xử lý, lưu trữ và suy luận ngữ cảnh.",
+  "Implicit context model: Mô hình ngữ cảnh ngầm định. Ứng dụng sử dụng các library, framework, toolkit để thực hiện các chức năng quản lý ngữ cảnh.",
+  "Explicit context model: Mô hình ngữ cảnh tường minh. Sử dụng hạ tầng/middleware quản lý ngữ cảnh riêng biệt, ứng dụng không trực tiếp xử lý."
+ ]},
+ {h:"Xu hướng", txt:"→ Mô hình Explicit context model được ưu tiên sử dụng nhiều hơn vì giúp tách biệt ứng dụng với hạ tầng và dễ mở rộng."}]},
+
+{id:16, part:2, q:"Liệt kê 5 thách thức kỹ thuật lớn mà hệ thống IoT cần giải quyết?",
+ sec:[{h:"Khi số lượng thiết bị và lượng dữ liệu IoT tăng mạnh, 5 vấn đề quan trọng cần giải quyết gồm", num:true, items:[
+  "Xử lý và phân tích lượng dữ liệu lớn.",
+  "Sử dụng tài nguyên hiệu quả.",
+  "Khả năng mở rộng của hệ thống.",
+  "Khả năng sẵn sàng/khả dụng của hệ thống.",
+  "Độ tin cậy của hệ thống."
+ ]},
+ {h:"Lưu ý", txt:"→ Đây là 5 ý nên học đúng cụm, vì chúng được nêu liên tiếp khi nói về các hệ thống IoT/5G quy mô lớn."}]},
+
+{id:17, part:2, q:"So sánh ưu điểm và nhược điểm của chuẩn WiFi 802.11b so với chuẩn 802.11a?",
+ sec:[{h:"Chuẩn WiFi 802.11b (2.4 GHz, tối đa 11 Mbps)", items:[
+  "Ưu điểm: Giá thành rẻ, tầm phủ sóng rộng và khả năng xuyên vật cản tốt.",
+  "Nhược điểm: Tốc độ thấp (11 Mbps), dễ bị nhiễu do chung băng tần 2.4 GHz."
+ ]},
+ {h:"Chuẩn WiFi 802.11a (5 GHz, tối đa 54 Mbps)", items:[
+  "Ưu điểm: Tốc độ cao hơn nhiều (54 Mbps), ít bị nhiễu sóng.",
+  "Nhược điểm: Chi phí cao, tầm phủ sóng ngắn hơn và xuyên tường kém hơn."
+ ]}]},
+
+{id:18, part:2, q:"Trình bày giải pháp giao thông thông minh trong Smart City và lợi ích của nó tại các đô thị lớn?",
+ sec:[{h:"Giải pháp", txt:"Sử dụng IoT, cảm biến, WSN, GPS và các hệ thống xử lý dữ liệu để giám sát giao thông, tối ưu đèn tín hiệu, giao thông công cộng và lựa chọn tuyến đường."},
+      {h:"Lợi ích thực tế", items:[
+  "Giúp cư dân di chuyển nhanh, thuận lợi và tiết kiệm chi phí.",
+  "Giảm phương tiện cá nhân và ùn tắc giao thông.",
+  "Góp phần giảm khí thải ô nhiễm môi trường.",
+  "Hỗ trợ phương tiện khẩn cấp bằng cách lựa chọn lộ trình tối ưu và ưu tiên đèn xanh."
+ ]}]},
+
+{id:19, part:2, q:"Nêu các yêu cầu cơ bản về khả năng mở rộng và bảo mật dữ liệu trong hệ thống tính toán cho IoT?",
+ sec:[{h:"Khả năng mở rộng (Scalability)", txt:"Hệ thống phải có khả năng xử lý khi lượng dữ liệu tăng lên và khi bổ sung thêm nhiều thiết bị mới, nhưng không làm ảnh hưởng đáng kể đến độ trễ và thời gian phản hồi."},
+      {h:"Bảo mật dữ liệu (Data Security)", txt:"Hệ thống phải có khả năng chống lại các cuộc tấn công từ bên ngoài nhằm vào các dữ liệu bí mật được lưu trữ trong hệ thống hoặc truyền trên mạng."},
+      {h:"Nhớ nhanh", txt:"→ Scalability = tăng dữ liệu/thiết bị nhưng vẫn đáp ứng tốt | Data Security = bảo vệ dữ liệu bí mật trước tấn công."}]},
+
+{id:20, part:2, q:"Học máy đóng vai trò gì trong việc tối ưu hóa hoạt động của các thiết bị cảm biến IoT?",
+ sec:[{h:"Vai trò chung của Học máy", txt:"Học máy có thể phân tích dữ liệu IoT để thực hiện các nhiệm vụ như phân loại, dự đoán, phát hiện bất thường và nhận dạng, từ đó giúp hệ thống hoạt động tự động và thông minh hơn."},
+      {h:"Tối ưu cho thiết bị cảm biến", txt:"Đối với thiết bị cảm biến, học máy có thể dựa vào mức năng lượng còn lại và sự biến thiên của dữ liệu cảm biến để dự đoán và điều chỉnh hoạt động. Chẳng hạn, hệ thống có thể giảm tần suất thu thập và gửi dữ liệu khi phù hợp, qua đó giảm tiêu thụ năng lượng và kéo dài tối đa vòng đời hoạt động của nút cảm biến."}]},
+
+{id:21, part:2, q:"Trình bày các đặc điểm kỹ thuật về phần mềm cần xem xét khi thiết kế một hệ thống IoT?",
  sec:[{h:"Các đặc điểm cần xem xét gồm", items:[
   "Hỗ trợ toàn bộ vòng đời phát triển sản phẩm.",
   "Hỗ trợ thiết kế IC và phần mềm nhúng.",
@@ -605,28 +709,28 @@ const QUESTIONS = [
   "Ưu tiên phần mềm mã nguồn mở và các thiết bị được kiểm định/chứng nhận bởi tổ chức IoT uy tín."
  ]}]},
 
-{id:7, part:1, q:"So sánh sự khác biệt về độ tin cậy giữa kiến trúc mạng Star và Mesh?",
+{id:22, part:2, q:"So sánh sự khác biệt về độ tin cậy giữa kiến trúc mạng sao (Star) và mạng mắt lưới (Mesh)?",
  sec:[{h:"So sánh độ tin cậy", items:[
-  "Star: độ tin cậy thấp hơn vì tất cả các nút đều phải truyền dữ liệu qua hub trung tâm và chỉ có một đường giao tiếp duy nhất. Khi hub hoặc đường kết nối gặp sự cố, truyền thông bị ảnh hưởng.",
-  "Mesh: độ tin cậy cao hơn vì một nút có thể có nhiều đường đi đến đích. Khi một đường gặp sự cố có thể sử dụng đường khác."
+  "Star: Độ tin cậy thấp hơn vì tất cả các nút đều phải truyền dữ liệu qua hub trung tâm và chỉ có một đường giao tiếp duy nhất. Khi hub hoặc đường kết nối gặp sự cố, truyền thông bị ảnh hưởng.",
+  "Mesh: Độ tin cậy cao hơn vì một nút có thể có nhiều đường đi đến đích. Khi một đường gặp sự cố có thể sử dụng đường khác."
  ]},
  {h:"Kết luận", txt:"→ Mesh có độ tin cậy cao hơn Star."}]},
 
-{id:8, part:1, q:"Phân tích 3 hướng tiếp cận chính trong việc phát triển thành phố thông minh?",
+{id:23, part:2, q:"Phân tích 3 hướng tiếp cận chính trong việc phát triển thành phố thông minh (Smart City)?",
  sec:[{h:"3 hướng tiếp cận chính", items:[
   "Từ trên xuống: xây dựng kiến trúc tổng thể trước, sau đó triển khai từng dự án cụ thể.",
   "Từ dưới lên: xây dựng từng dự án trước, sau đó tích hợp thành kiến trúc tổng thể.",
   "Lai ghép: kết hợp cả hai cách trên, vừa xây dựng kiến trúc chung, vừa triển khai và tích hợp các dự án."
  ]}]},
 
-{id:9, part:1, q:"Trình bày sự khác biệt cơ bản giữa PaaS và SaaS?",
+{id:24, part:2, q:"Trình bày sự khác biệt cơ bản giữa mô hình dịch vụ nền tảng (PaaS) và phần mềm (SaaS)?",
  sec:[{h:"Phân biệt PaaS và SaaS", items:[
   "PaaS: Cung cấp nền tảng và công cụ (môi trường thực thi, CSDL) cho lập trình viên phát triển và triển khai ứng dụng.",
   "SaaS: Cung cấp phần mềm hoàn chỉnh chạy trên đám mây cho người dùng cuối sử dụng trực tiếp."
  ]},
  {h:"Khác biệt cơ bản", txt:"→ Khác biệt cơ bản: PaaS dùng để phát triển/triển khai ứng dụng (dành cho Developer); SaaS dùng để sử dụng ứng dụng có sẵn (dành cho End-user)."}]},
 
-{id:10, part:1, q:"Nêu các bước cơ bản trong một quy trình xử lý của Machine Learning?",
+{id:25, part:2, q:"Nêu các bước cơ bản trong một quy trình xử lý của học máy (Machine Learning)?",
  sec:[{h:"Quy trình gồm các bước", num:true, items:[
   "Thu thập dữ liệu",
   "Tiền xử lý dữ liệu",
@@ -635,118 +739,7 @@ const QUESTIONS = [
   "Đánh giá hiệu suất",
   "Thực thi mô hình"
  ]},
- {h:"Kết quả cuối cùng", txt:"Kết quả cuối cùng của mô hình là dự đoán hoặc nhận dạng."}]},
-
-{id:11, part:1, q:"Tại sao việc tối ưu hóa năng lượng lại đóng vai trò quan trọng trong thiết kế thiết bị IoT?",
- sec:[{h:"Lý do quan trọng", items:[
-  "Vì phần lớn cảm biến IoT sử dụng pin, nên năng lượng bị giới hạn. Tối ưu năng lượng giúp kéo dài thời gian hoạt động và tuổi thọ của thiết bị.",
-  "Một giải pháp là chỉ cho node hoạt động khi thu thập và truyền dữ liệu, sau đó chuyển sang chế độ sleep."
- ]}]},
-
-{id:12, part:1, q:"Trình bày vai trò của tầng Network trong mô hình phân lớp giao thức 6LoWPAN?",
- sec:[{h:"Tầng Network có nhiệm vụ", items:[
-  "Đánh địa chỉ mạng.",
-  "Định tuyến dữ liệu qua mạng.",
-  "Cung cấp địa chỉ IP để truyền dữ liệu đến thiết bị khác."
- ]},
- {h:"Giao thức sử dụng", txt:"Trong 6LoWPAN sử dụng IPv6."}]},
-
-{id:13, part:1, q:"Mô tả giải pháp giao thông thông minh và các lợi ích thực tế mà nó mang lại cho cư dân đô thị?",
- sec:[{h:"Giải pháp", txt:"Sử dụng IoT, cảm biến, WSN, GPS và các hệ thống xử lý dữ liệu để giám sát giao thông, tối ưu đèn tín hiệu, giao thông công cộng và lựa chọn tuyến đường."},
-      {h:"Lợi ích thực tế", items:[
-  "Giúp cư dân di chuyển nhanh, thuận lợi và tiết kiệm chi phí.",
-  "Giảm phương tiện cá nhân và ùn tắc.",
-  "Góp phần giảm khí thải.",
-  "Hỗ trợ phương tiện khẩn cấp bằng cách lựa chọn lộ trình tối ưu và ưu tiên đèn xanh."
- ]}]},
-
-{id:14, part:2, q:"Liệt kê 3 lợi ích quan trọng nhất của điện toán đám mây đối với doanh nghiệp?",
- sec:[{h:"3 lợi ích quan trọng nhất", num:true, items:[
-  "Giảm chi phí đầu tư.",
-  "Nâng cao hiệu quả chuyên môn hóa theo quy mô công nghiệp.",
-  "Nâng cao hiệu quả sử dụng tài nguyên."
- ]}]},
-
-{id:15, part:2, q:"Trình bày 3 hướng tiếp cận chính cho một hệ thống thích ứng ngữ cảnh trong IoT?",
- sec:[{h:"3 hướng tiếp cận chính", num:true, items:[
-  "No application level context model: Mô hình không quản lý ngữ cảnh ở mức ứng dụng. Ứng dụng tự thực hiện thu thập, tiền xử lý, lưu trữ và suy luận ngữ cảnh.",
-  "Implicit context model: Mô hình ngữ cảnh ngầm định. Ứng dụng sử dụng các library, framework, toolkit để thực hiện các chức năng quản lý ngữ cảnh.",
-  "Explicit context model: Mô hình ngữ cảnh tường minh. Sử dụng hạ tầng/middleware quản lý ngữ cảnh riêng biệt, ứng dụng không trực tiếp xử lý."
- ]},
- {h:"Xu hướng", txt:"→ Mô hình Explicit context model được ưu tiên sử dụng nhiều hơn vì giúp tách biệt ứng dụng với hạ tầng và dễ mở rộng."}]},
-
-{id:16, part:2, q:"Theo dự báo của Cisco, số lượng thiết bị kết nối Internet vào năm 2020 là bao nhiêu?",
- sec:[{h:"Dự báo của Cisco", txt:"Theo dự báo được nêu, số lượng thiết bị kết nối Internet vào năm 2020 đạt khoảng 50 tỷ thiết bị."}]},
-
-{id:17, part:2, q:"Trình bày các đặc điểm cơ bản của chuẩn IEEE 802.15.4 được sử dụng trong Zigbee?",
- sec:[{h:"Đặc điểm cơ bản của IEEE 802.15.4 trong Zigbee", items:[
-  "Tốc độ truyền dữ liệu thấp: Tối đa 250 kbps, phù hợp truyền các gói tin nhỏ.",
-  "Tiêu thụ ít năng lượng: Tối ưu hóa giúp kéo dài tuổi thọ pin thiết bị.",
-  "Băng tần hoạt động: Hoạt động chủ yếu ở băng tần 2,4 GHz (băng tần ISM).",
-  "Phạm vi truyền: Ngắn, từ vài mét đến vài chục mét (khoảng 10m - 100m).",
-  "Ứng dụng: Phù hợp với các hệ thống điều khiển và tự động hóa trong IoT."
- ]},
- {h:"Đặc điểm cốt lõi", txt:"→ Chuẩn IEEE 802.15.4 cung cấp giải pháp kết nối không dây tốc độ thấp, siêu tiết kiệm năng lượng và phạm vi ngắn, tối ưu cho các thiết bị tự động hóa IoT."}]},
-
-{id:18, part:2, q:"Trình bày kiến trúc của hệ thống dự báo ô nhiễm không khí dựa trên bụi PM2.5?",
- sec:[{h:"Quy trình kiến trúc", txt:"Cảm biến PM2.5 → Zigbee → Gateway → Cloud → xử lý, phân tích và dự báo bằng AI → hiển thị dữ liệu, cảnh báo và dự đoán trên Mobile App/Web App."}]},
-
-{id:19, part:2, q:"Trình bày yêu cầu về Data Security trong hệ thống tính toán cho IoT?",
- sec:[{h:"Yêu cầu Data Security", txt:"Data Security yêu cầu hệ thống có khả năng chống các cuộc tấn công từ bên ngoài nhằm vào dữ liệu bí mật được lưu trữ trong hệ thống hoặc trên mạng."}]},
-
-{id:20, part:2, q:"Nêu các đặc điểm chính của thông tin ngữ cảnh trong IoT?",
- sec:[{h:"Thông tin ngữ cảnh có 8 đặc điểm", num:true, items:[
-  "Được thu thập từ nút cảm biến hoặc mạng cảm biến.",
-  "Được thu thập từ thiết bị nhỏ, tài nguyên hạn chế.",
-  "Được thu thập từ nhiều nguồn.",
-  "Thay đổi liên tục.",
-  "Có thể thu thập từ đối tượng đứng yên hoặc di động.",
-  "Có yếu tố thời gian.",
-  "Có yếu tố không gian.",
-  "Có thể không hoàn hảo và không chắc chắn."
- ]}]},
-
-{id:21, part:2, q:"Những công nghệ nền tảng nào cần thiết để xây dựng đô thị thông minh tại Việt Nam?",
- sec:[{h:"Các công nghệ nền tảng chính gồm", items:[
-  "IoT/5G để kết nối, thu thập và giám sát dữ liệu.",
-  "Cloud Computing để lưu trữ và tính toán.",
-  "Edge Computing để xử lý gần thiết bị, giảm độ trễ.",
-  "Big Data để xử lý lượng dữ liệu lớn.",
-  "AI để phân tích dữ liệu và tạo tính thông minh cho ứng dụng."
- ]},
- {h:"Lưu ý bổ sung", txt:"Ngoài ra nên ưu tiên các nền tảng mã nguồn mở để tăng khả năng làm chủ công nghệ."}]},
-
-{id:22, part:2, q:"Trình bày ưu điểm của chuẩn WiFi 802.11n?",
- sec:[{h:"Công nghệ sử dụng", txt:"802.11n sử dụng công nghệ MIMO, tận dụng nhiều tín hiệu và nhiều anten."},
-      {h:"Ưu điểm", items:[
-  "Tốc độ có thể đạt khoảng 100 Mbps.",
-  "Phạm vi phủ sóng tốt hơn.",
-  "Khả năng chịu nhiễu tốt hơn.",
-  "Tương thích với thiết bị 802.11g."
- ]}]},
-
-{id:23, part:2, q:"Cho ví dụ về quản lý thiết bị nhà bếp thông minh trong Smart Home?",
- sec:[{h:"Ví dụ", items:[
-  "Tủ lạnh thông minh: biết số lượng trứng còn lại, dự đoán khi nào sẽ hết và cảnh báo gia chủ mua thêm.",
-  "Máy pha cà phê thông minh: dựa vào tình trạng sức khỏe và khẩu vị từng người để xác định loại cà phê, lượng cà phê và thời điểm sử dụng, sau đó tự pha mà không cần người dùng can thiệp."
- ]}]},
-
-{id:24, part:2, q:"Trình bày vai trò của Data Center trong hệ thống IoT?",
- sec:[{h:"Data Center có vai trò", items:[
-  "Cung cấp khả năng tính toán và lưu trữ lớn.",
-  "Quản lý, điều khiển và phân phối tài nguyên tính toán và lưu trữ.",
-  "Xử lý các tác vụ của ứng dụng yêu cầu năng lực tính toán lớn.",
-  "Trong Smart City, Data Center còn lưu trữ, xử lý, phân tích dữ liệu và hỗ trợ đưa ra quyết định."
- ]}]},
-
-{id:25, part:2, q:"Giải thích quy trình suy diễn ngữ cảnh từ dữ liệu thô (Raw Data)?",
- sec:[{h:"Quy trình", txt:"Raw Data → Sensed-context → Combined-context / Inferred-context → Learned-context."},
-      {h:"Chi tiết các mức ngữ cảnh", items:[
-  "Sensed-context: dữ liệu thô thu trực tiếp từ cảm biến như nhiệt độ, độ ẩm, ánh sáng.",
-  "Combined-context: được tạo từ Sensed-context bằng tính toán toán học.",
-  "Inferred-context: được tạo bằng cách áp dụng các luật suy luận lên Sensed-context để tạo ngữ cảnh mức cao hơn.",
-  "Learned-context: được tạo bằng các thuật toán học/data mining như Decision Tree, Neural Network dựa trên các ngữ cảnh đã có."
- ]}]}
+ {h:"Kết quả cuối cùng", txt:"Kết quả cuối cùng của mô hình là dự đoán hoặc nhận dạng."}]}
 ];
 
 /* ================= STATE ================= */
