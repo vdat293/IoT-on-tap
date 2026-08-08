@@ -568,11 +568,12 @@ const QUESTIONS = [
  ]}]},
 
 {id:2, part:1, q:"Phân tích ưu điểm của kiến trúc mạng Mesh so với mạng Star trong ứng dụng IoT?",
- sec:[{h:"So sánh kiến trúc", items:[
-  "Mesh: một nút có thể có nhiều đường đi đến đích, nên khi một đường gặp sự cố có thể sử dụng đường khác.",
-  "Star: tất cả dữ liệu phải đi qua hub trung tâm và chỉ có một đường giao tiếp duy nhất."
+ sec:[{h:"Ưu điểm của mạng Mesh so với Star", items:[
+  "Một nút có thể có nhiều đường đi đến đích (đa đường truyền).",
+  "Khi một đường gặp sự cố, dữ liệu tự động đi theo đường khác (tự khắc phục lỗi - Self-healing).",
+  "Độ tin cậy và khả năng duy trì kết nối tốt hơn mạng Star vốn phụ thuộc hoàn toàn vào nút trung tâm (Hub/Gateway)."
  ]},
- {h:"Kết luận", txt:"→ Vì vậy, Mesh linh hoạt và có khả năng duy trì truyền thông tốt hơn Star khi xảy ra lỗi đường truyền."}]},
+ {h:"Kết luận", txt:"→ Ưu điểm nổi bật: Mesh có nhiều đường truyền dự phòng và không phụ thuộc điểm lỗi duy nhất, giúp mạng linh hoạt và tin cậy hơn khi xảy ra sự cố."}]},
 
 {id:3, part:1, q:"Liệt kê các thành phần chính trong kiến trúc tổng thể của một thành phố thông minh (Smart City)?",
  sec:[{h:"Kiến trúc IoT của Smart City gồm 4 lớp", num:true, items:[
@@ -618,10 +619,10 @@ const QUESTIONS = [
 
 {id:9, part:1, q:"Trình bày sự khác biệt cơ bản giữa PaaS và SaaS?",
  sec:[{h:"Phân biệt PaaS và SaaS", items:[
-  "PaaS: cung cấp nền tảng và công cụ để người dùng phát triển và triển khai ứng dụng lên Cloud.",
-  "SaaS: cung cấp ứng dụng hoàn chỉnh của nhà cung cấp để người dùng sử dụng trực tiếp qua trình duyệt web hoặc ứng dụng mobile."
+  "PaaS: Cung cấp nền tảng và công cụ (môi trường thực thi, CSDL) cho lập trình viên phát triển và triển khai ứng dụng.",
+  "SaaS: Cung cấp phần mềm hoàn chỉnh chạy trên đám mây cho người dùng cuối sử dụng trực tiếp."
  ]},
- {h:"Khác biệt chính", txt:"→ Khác biệt chính: PaaS dành cho phát triển/triển khai ứng dụng; SaaS dành cho sử dụng ứng dụng có sẵn."}]},
+ {h:"Khác biệt cơ bản", txt:"→ Khác biệt cơ bản: PaaS dùng để phát triển/triển khai ứng dụng (dành cho Developer); SaaS dùng để sử dụng ứng dụng có sẵn (dành cho End-user)."}]},
 
 {id:10, part:1, q:"Nêu các bước cơ bản trong một quy trình xử lý của Machine Learning?",
  sec:[{h:"Quy trình gồm các bước", num:true, items:[
@@ -666,24 +667,24 @@ const QUESTIONS = [
 
 {id:15, part:2, q:"Trình bày 3 hướng tiếp cận chính cho một hệ thống thích ứng ngữ cảnh trong IoT?",
  sec:[{h:"3 hướng tiếp cận chính", num:true, items:[
-  "No application level context model: ứng dụng tự thực hiện thu thập, tiền xử lý, lưu trữ và suy luận ngữ cảnh.",
-  "Implicit context model: ứng dụng sử dụng library, framework, toolkit để thực hiện các chức năng trên.",
-  "Explicit context model: sử dụng context management infrastructure/middleware, ứng dụng không trực tiếp thực hiện các chức năng quản lý ngữ cảnh."
+  "No application level context model: Mô hình không quản lý ngữ cảnh ở mức ứng dụng. Ứng dụng tự thực hiện thu thập, tiền xử lý, lưu trữ và suy luận ngữ cảnh.",
+  "Implicit context model: Mô hình ngữ cảnh ngầm định. Ứng dụng sử dụng các library, framework, toolkit để thực hiện các chức năng quản lý ngữ cảnh.",
+  "Explicit context model: Mô hình ngữ cảnh tường minh. Sử dụng hạ tầng/middleware quản lý ngữ cảnh riêng biệt, ứng dụng không trực tiếp xử lý."
  ]},
- {h:"Ghi chú", txt:"Hướng Explicit context model được ưu tiên sử dụng hơn trong thời gian gần đây."}]},
+ {h:"Xu hướng", txt:"→ Mô hình Explicit context model được ưu tiên sử dụng nhiều hơn vì giúp tách biệt ứng dụng với hạ tầng và dễ mở rộng."}]},
 
 {id:16, part:2, q:"Theo dự báo của Cisco, số lượng thiết bị kết nối Internet vào năm 2020 là bao nhiêu?",
  sec:[{h:"Dự báo của Cisco", txt:"Theo dự báo được nêu, số lượng thiết bị kết nối Internet vào năm 2020 đạt khoảng 50 tỷ thiết bị."}]},
 
 {id:17, part:2, q:"Trình bày các đặc điểm cơ bản của chuẩn IEEE 802.15.4 được sử dụng trong Zigbee?",
- sec:[{h:"IEEE 802.15.4 được thiết kế cho mạng", items:[
-  "Tốc độ dữ liệu thấp.",
-  "Công suất thấp.",
-  "Hỗ trợ cơ chế truy cập CSMA/CA.",
-  "PSDU mang tối đa 127 byte dữ liệu.",
-  "Hỗ trợ cấu hình mạng đa dạng và điều chỉnh chu kỳ hoạt động của thiết bị."
+ sec:[{h:"Đặc điểm cơ bản của IEEE 802.15.4 trong Zigbee", items:[
+  "Tốc độ truyền dữ liệu thấp: Tối đa 250 kbps, phù hợp truyền các gói tin nhỏ.",
+  "Tiêu thụ ít năng lượng: Tối ưu hóa giúp kéo dài tuổi thọ pin thiết bị.",
+  "Băng tần hoạt động: Hoạt động chủ yếu ở băng tần 2,4 GHz (băng tần ISM).",
+  "Phạm vi truyền: Ngắn, từ vài mét đến vài chục mét (khoảng 10m - 100m).",
+  "Ứng dụng: Phù hợp với các hệ thống điều khiển và tự động hóa trong IoT."
  ]},
- {h:"Trong Zigbee", txt:"Trong Zigbee, chuẩn này kết hợp với các cơ chế như O-QPSK/DSSS, CRC và ACK để tăng độ tin cậy."}]},
+ {h:"Đặc điểm cốt lõi", txt:"→ Chuẩn IEEE 802.15.4 cung cấp giải pháp kết nối không dây tốc độ thấp, siêu tiết kiệm năng lượng và phạm vi ngắn, tối ưu cho các thiết bị tự động hóa IoT."}]},
 
 {id:18, part:2, q:"Trình bày kiến trúc của hệ thống dự báo ô nhiễm không khí dựa trên bụi PM2.5?",
  sec:[{h:"Quy trình kiến trúc", txt:"Cảm biến PM2.5 → Zigbee → Gateway → Cloud → xử lý, phân tích và dự báo bằng AI → hiển thị dữ liệu, cảnh báo và dự đoán trên Mobile App/Web App."}]},
